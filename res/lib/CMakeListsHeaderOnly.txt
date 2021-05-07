@@ -1,0 +1,39 @@
+add_library(%project_name% INTERFACE)
+add_library(%project_name%::%project_name% ALIAS %project_name%)
+
+target_include_directories(%project_name%
+INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+if (ENABLE_INSTALL)
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file(
+        "${PROJECT_BINARY_DIR}/%project_name%ConfigVersion.cmake"
+        VERSION ${PACKAGE_VERSION}
+        COMPATIBILITY SameMajorVersion
+    )
+
+    install(TARGETS %project_name%
+        EXPORT %project_name%Targets
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        PUBLIC_HEADER DESTINATION include
+    )
+
+    include(CMakePackageConfigHelpers)
+    configure_package_config_file(
+        "${PROJECT_SOURCE_DIR}/cmake/%project_name%Config.cmake.in"
+        "${PROJECT_BINARY_DIR}/%project_name%Config.cmake"
+        INSTALL_DESTINATION lib/cmake/%project_name%
+    )
+
+    export(TARGETS %project_name% NAMESPACE %project_name%:: FILE %project_name%Config.cmake)
+    install(EXPORT %project_name%Targets NAMESPACE %project_name%:: DESTINATION lib/cmake/%project_name%)
+    install(FILES "${PROJECT_BINARY_DIR}/%project_name%ConfigVersion.cmake"
+                  "${PROJECT_BINARY_DIR}/%project_name%Config.cmake"
+            DESTINATION lib/cmake/%project_name%)
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/lib/include/ DESTINATION include)
+endif ()

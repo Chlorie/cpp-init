@@ -1,0 +1,12 @@
+{
+    "name": "cpp-init",
+    "version-string": "0.1.0",
+    "dependencies": [
+        "boost-algorithm",
+        "boost-process",
+        "boost-dll",
+        "fmt",
+        "nlohmann-json",
+        "console"
+    ]
+}
