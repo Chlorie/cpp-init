@@ -43,7 +43,7 @@ function (target_set_warnings TGT)
         
     if (MSVC) # Visual Studio
         target_compile_options(${TGT} INTERFACE ${MSVC_WARNINGS}
-            /experimental:external /external:W0 /external:anglebrackets)
+            /experimental:external /external:W3 /external:anglebrackets)
     elseif (CMAKE_CXX_COMPILER_ID MATCHES ".*Clang") # clang
         target_compile_options(${TGT} INTERFACE ${CLANG_WARNINGS})
     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU") # gcc

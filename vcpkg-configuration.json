@@ -3,6 +3,7 @@
         {
             "kind": "git",
             "repository": "https://github.com/Chlorie/vcpkg-ports",
+            "baseline": "cf169820b77c1dd8e8f9812b30bc53f9bc79ff75",
             "packages": [
                 "console"
             ]
