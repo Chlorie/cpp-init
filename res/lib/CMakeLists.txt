@@ -26,7 +26,6 @@ add_sources(SOURCES
 # find_package(fmt CONFIG REQUIRED)
 
 target_sources(%project_name% PRIVATE ${HEADERS} ${SOURCES})
-target_set_options(%project_name%)
 target_set_options(%project_name% PRIVATE)
 target_set_warnings(%project_name% PRIVATE)
 target_compile_features(%project_name% PRIVATE cxx_std_20)
