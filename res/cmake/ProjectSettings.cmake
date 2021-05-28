@@ -69,7 +69,12 @@ function (target_set_options TGT ACCESS)
         else () # Windows XP (5.1)
             set(WIN32_WINNT 0x0501)
         endif ()
-        target_compile_definitions(${TGT} PUBLIC _WIN32_WINNT=${WIN32_WINNT})
+        string(TOUPPER ${ACCESS} ACCESS)
+        if (ACCESS STREQUAL "INTERFACE")
+            target_compile_definitions(${TGT} INTERFACE _WIN32_WINNT=${WIN32_WINNT})
+        else ()
+            target_compile_definitions(${TGT} PUBLIC _WIN32_WINNT=${WIN32_WINNT})
+        endif ()
     endif ()
         
     if (MSVC) # Visual Studio
