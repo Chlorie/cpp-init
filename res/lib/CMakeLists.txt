@@ -1,8 +1,8 @@
 add_library(%project_name%)
 add_library(%project_name%::%project_name% ALIAS %project_name%)
 
-target_set_output_dirs(%project_name%)
 set_target_properties(%project_name% PROPERTIES LINKER_LANGUAGE CXX)
+target_set_output_dirs(%project_name%)
 
 function (add_headers TGT)
     set(headers ${ARGN})
@@ -27,6 +27,9 @@ add_sources(SOURCES
 
 target_sources(%project_name% PRIVATE ${HEADERS} ${SOURCES})
 target_set_options(%project_name%)
+target_set_options(%project_name% PRIVATE)
+target_set_warnings(%project_name% PRIVATE)
+target_compile_features(%project_name% PRIVATE cxx_std_20)
 
 if (BUILD_SHARED_LIBS)
     target_compile_definitions(%project_name%

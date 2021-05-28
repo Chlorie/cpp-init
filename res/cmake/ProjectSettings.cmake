@@ -15,7 +15,7 @@ endif ()
 
 set(CMAKE_CXX_EXTENSIONS ${ENABLE_CXX_EXTENSIONS})
 
-function (target_set_warnings TGT)
+function (target_set_warnings TGT ACCESS)
     option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors" ON)
 
     set(MSVC_WARNINGS
@@ -42,18 +42,18 @@ function (target_set_warnings TGT)
         -Wlogical-op -Wuseless-cast)
         
     if (MSVC) # Visual Studio
-        target_compile_options(${TGT} INTERFACE ${MSVC_WARNINGS}
+        target_compile_options(${TGT} ${ACCESS} ${MSVC_WARNINGS}
             /experimental:external /external:W0 /external:anglebrackets /external:templates-)
     elseif (CMAKE_CXX_COMPILER_ID MATCHES ".*Clang") # clang
-        target_compile_options(${TGT} INTERFACE ${CLANG_WARNINGS})
+        target_compile_options(${TGT} ${ACCESS} ${CLANG_WARNINGS})
     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU") # gcc
-        target_compile_options(${TGT} INTERFACE ${GCC_WARNINGS})
+        target_compile_options(${TGT} ${ACCESS} ${GCC_WARNINGS})
     else()
         message(AUTHOR_WARNING "No compiler warnings set for '${CMAKE_CXX_COMPILER_ID}' compiler.")
     endif ()
 endfunction ()
 
-function (target_set_options TGT)
+function (target_set_options TGT ACCESS)
     # Asio requires _WIN32_WINNT to be set
     if (WIN32)
         if (${CMAKE_SYSTEM_VERSION} EQUAL 10) # Windows 10
@@ -69,17 +69,17 @@ function (target_set_options TGT)
         else () # Windows XP (5.1)
             set(WIN32_WINNT 0x0501)
         endif ()
-        target_compile_definitions(${TGT} INTERFACE _WIN32_WINNT=${WIN32_WINNT})
+        target_compile_definitions(${TGT} PUBLIC _WIN32_WINNT=${WIN32_WINNT})
     endif ()
         
     if (MSVC) # Visual Studio
-        target_compile_options(${TGT} INTERFACE # Conformance settings
+        target_compile_options(${TGT} ${ACCESS} # Conformance settings
             /utf-8 /permissive- /Zc:__cplusplus /Zc:externConstexpr)
     # Colored diagnostics for clang and gcc
     elseif (CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-        target_compile_options(${TGT} INTERFACE -fcolor-diagnostics)
+        target_compile_options(${TGT} ${ACCESS} -fcolor-diagnostics)
     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        target_compile_options(${TGT} INTERFACE -fdiagnostics-color=always)
+        target_compile_options(${TGT} ${ACCESS} -fdiagnostics-color=always)
     endif ()
 endfunction ()
 
